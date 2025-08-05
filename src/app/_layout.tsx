@@ -1,3 +1,4 @@
+import '@/src/global.css';
 import 'expo-dev-client';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
@@ -6,16 +7,22 @@ import { StatusBar } from 'expo-status-bar';
 import 'react-native-reanimated';
 import '../global.css';
 
-import { GluestackUIProvider } from '@/src/components/ui/gluestack-ui-provider/GluestackUIProvider';
 import { useEffect } from 'react';
 import { ThemeProvider } from '../components/ThemeProvider';
+import { GluestackUIProvider } from '../components/ui/gluestack-ui-provider/GluestackUIProvider';
 
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
-    InterFont: require('@/assets/fonts/inter-variable-font.ttf'),
-    InterItalicFont: require('@/assets/fonts/inter-italic-variable-font.ttf'),
+    InterRegular: require('@/assets/fonts/inter-regular.ttf'),
+    InterMedium: require('@/assets/fonts/inter-medium.ttf'),
+    InterLight: require('@/assets/fonts/inter-light.ttf'),
+    InterSemiBold: require('@/assets/fonts/inter-semibold.ttf'),
+    InterThin: require('@/assets/fonts/inter-thin.ttf'),
+    InterExtraBold: require('@/assets/fonts/inter-extra-bold.ttf'),
+    InterBold: require('@/assets/fonts/inter-bold.ttf'),
+    InterBlack: require('@/assets/fonts/inter-black.ttf'),
   });
 
   useEffect(() => {

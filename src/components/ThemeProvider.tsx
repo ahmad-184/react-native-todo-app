@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import { useColorScheme } from 'nativewind';
+import React, { createContext, useContext, useEffect } from 'react';
 
 type Theme = 'light' | 'dark';
 
@@ -11,13 +12,12 @@ interface ThemeContextType {
 export const ThemeContext = createContext<ThemeContextType | undefined>(undefined);
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-  const [theme, setTheme] = useState<Theme>('light');
+  const { setColorScheme, colorScheme: theme } = useColorScheme();
 
   useEffect(() => {
     (async () => {
       const savedTheme = (await AsyncStorage.getItem('theme')) as Theme | 'light';
       if (savedTheme) {
-        setTheme(savedTheme);
         AsyncStorage.setItem('theme', savedTheme);
       }
     })();
@@ -25,11 +25,15 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
   const toggleTheme = () => {
     const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
+    setColorScheme(newTheme);
     AsyncStorage.setItem('theme', newTheme);
   };
 
-  return <ThemeContext.Provider value={{ theme, toggleTheme }}>{children}</ThemeContext.Provider>;
+  return (
+    <ThemeContext.Provider value={{ theme: theme ?? 'light', toggleTheme }}>
+      {children}
+    </ThemeContext.Provider>
+  );
 };
 
 export const useTheme = () => {

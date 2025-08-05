@@ -2,14 +2,8 @@ import gluestackPlugin from '@gluestack-ui/nativewind-utils/tailwind-plugin';
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  darkMode: process.env.DARK_MODE ? process.env.DARK_MODE : 'media',
-  content: [
-    './src/app/**/*.{html,js,jsx,ts,tsx}',
-    './src/core-components/**/**/*.{html,js,jsx,ts,tsx}',
-    './src/components/**/*.{html,js,jsx,ts,tsx,mdx}',
-    './src/lib/**/*.{html,js,jsx,ts,tsx,mdx}',
-    './src/hooks/**/*.{html,js,jsx,ts,tsx,mdx}',
-  ],
+  darkMode: 'media',
+  content: ['src/**/*.{tsx,jsx,ts,js}', 'components/**/*.{tsx,jsx,ts,js}'],
   presets: [require('nativewind/preset')],
   safelist: [
     {
@@ -180,6 +174,14 @@ module.exports = {
         body: undefined,
         mono: undefined,
         roboto: ['Roboto', 'sans-serif'],
+        'inter-regular': ['InterRegular', 'sans-serif'],
+        'inter-medium': ['InterMedium', 'sans-serif'],
+        'inter-light': ['InterLight', 'sans-serif'],
+        'inter-semibold': ['InterSemiBold', 'sans-serif'],
+        'inter-thin': ['InterThin', 'sans-serif'],
+        'inter-extra-bold': ['InterExtraBold', 'sans-serif'],
+        'inter-bold': ['InterBold', 'sans-serif'],
+        'inter-black': ['InterBlack', 'sans-serif'],
       },
       fontWeight: {
         extrablack: '950',
