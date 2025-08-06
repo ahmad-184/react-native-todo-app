@@ -5,8 +5,11 @@ import { Todo } from '../types';
 
 type TodoStore = {
   todos: Todo[];
+  editingTodoId: string | null;
   addTodo: (data: Todo) => void;
+  updateTodo: (data: Partial<Todo> & { id: string }) => void;
   removeTodo: (id: string) => void;
+  setEditingTodoId: (id: string | null) => void;
   clearTodos: () => void;
 };
 
@@ -27,13 +30,28 @@ export const useTodoStore = create<TodoStore>()(
   persist(
     set => ({
       todos: [],
+      editingTodoId: null,
       addTodo: data =>
         set(state => ({
           todos: [data, ...state.todos],
         })),
+      updateTodo: data =>
+        set(state => ({
+          todos: state.todos.map(todo => {
+            if (todo.id === data.id) {
+              const updatedTodo = { ...todo, ...data };
+              return updatedTodo;
+            }
+            return todo;
+          }),
+        })),
       removeTodo: id =>
         set(state => ({
           todos: state.todos.filter(todo => todo.id !== id),
+        })),
+      setEditingTodoId: id =>
+        set(() => ({
+          editingTodoId: id,
         })),
       clearTodos: () => set({ todos: [] }),
     }),

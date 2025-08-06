@@ -22,7 +22,12 @@ export default function TabLayout() {
           backgroundColor: 'transparent',
         },
         tabBarBackground: () => (
-          <View style={{ backgroundColor: theme === 'dark' ? '#1e1b4b' : '#faf5ff', flex: 1 }} />
+          <View
+            style={{
+              backgroundColor: theme === 'dark' ? '#1e1b4b' : '#faf5ff',
+              flex: 1,
+            }}
+          />
         ),
       })}>
       <Tabs.Screen

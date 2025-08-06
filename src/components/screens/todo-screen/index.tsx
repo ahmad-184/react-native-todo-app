@@ -2,13 +2,15 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Box } from '../../ui/box';
 import Header from './header';
 import TodoInput from './todo-input';
+import TodoList from './todo-list';
 
 export default function TodoScreen() {
   return (
-    <SafeAreaView className="flex-1 py-10 px-6">
+    <SafeAreaView edges={{ top: 'maximum' }} className="flex-1 p-0 !pb-0 px-5">
       <Header />
-      <Box className="h-1" />
       <TodoInput />
+      <Box className="h-9" />
+      <TodoList />
     </SafeAreaView>
   );
 }

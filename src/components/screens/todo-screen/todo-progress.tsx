@@ -31,13 +31,15 @@ export default function TodoProgress({ progress }: Props) {
     <HStack className="gap-2 items-center justify-between">
       <Box className="w-[88%] h-3 rounded-xl overflow-hidden bg-neutral-200 relative">
         <LinearGradient
-          colors={theme === 'dark' ? ['#737373', '#525252'] : ['#fafafa', '#fafafa']}
+          colors={theme === 'dark' ? ['#737373', '#525252'] : ['#d4d4d8', '#fafafa']}
           className="w-full h-full absolute inset-0"
         />
         <Animated.View className="h-full overflow-hidden" style={{ width: interpolatedWidth }}>
           <LinearGradient
             colors={theme === 'dark' ? ['#8b5cf6', '#7c3aed'] : ['#a78bfa', '#8b5cf6']}
             className="w-full h-full"
+            start={{ x: 1, y: 1 }}
+            end={{ x: 0, y: 0 }}
           />
         </Animated.View>
       </Box>

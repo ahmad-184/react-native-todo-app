@@ -8,6 +8,7 @@ import 'react-native-reanimated';
 import '../global.css';
 
 import { useEffect } from 'react';
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { ThemeProvider } from '../components/ThemeProvider';
 import { GluestackUIProvider } from '../components/ui/gluestack-ui-provider/GluestackUIProvider';
 
@@ -36,14 +37,16 @@ export default function RootLayout() {
   }
 
   return (
-    <ThemeProvider>
-      <GluestackUIProvider>
-        <StatusBar style="auto" />
-        <Stack>
-          <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-          <Stack.Screen name="+not-found" />
-        </Stack>
-      </GluestackUIProvider>
-    </ThemeProvider>
+    <SafeAreaProvider>
+      <ThemeProvider>
+        <GluestackUIProvider>
+          <StatusBar style="auto" />
+          <Stack>
+            <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+            <Stack.Screen name="+not-found" />
+          </Stack>
+        </GluestackUIProvider>
+      </ThemeProvider>
+    </SafeAreaProvider>
   );
 }

@@ -8,7 +8,7 @@ export default function HomeScreen() {
   return (
     <LinearGradient
       colors={theme === 'dark' ? ['#0b0a1b', '#1e1b4b'] : ['#f3e8ff', '#f3e8ff', '#faf5ff']}
-      className="flex-1">
+      className="flex-1 h-full p-0">
       <TodoScreen />
     </LinearGradient>
   );

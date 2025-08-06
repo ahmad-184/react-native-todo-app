@@ -45,6 +45,16 @@
     ],
     "experiments": {
       "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "expo-navigation-bar": {
+        "visibility": "hidden",
+        "behavior": "inset-swipe"
+      },
+      "eas": {
+        "projectId": "31fa3c76-8fc7-4718-ac11-06a4c2b9f44a"
+      }
     }
   }
 }

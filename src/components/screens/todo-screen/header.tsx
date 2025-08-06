@@ -1,3 +1,4 @@
+import { useTodoStore } from '@/src/store/store-todo';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Box } from '../../ui/box';
@@ -6,6 +7,13 @@ import { Text } from '../../ui/text';
 import TodoProgress from './todo-progress';
 
 export default function Header() {
+  const todos = useTodoStore(store => store.todos);
+
+  const total = todos.length;
+  const completed = todos.filter(todo => todo.isCompleted).length;
+
+  const percentageCompleted = total === 0 ? 0 : (completed / total) * 100;
+
   return (
     <Box className="mb-9 pt-5">
       <HStack className="gap-5 mb-5 items-center">
@@ -26,7 +34,7 @@ export default function Header() {
           </Text>
         </Box>
       </HStack>
-      <TodoProgress progress={55} />
+      <TodoProgress progress={parseFloat(percentageCompleted.toFixed(0))} />
     </Box>
   );
 }
