@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '../../ThemeProvider';
+import { Box } from '../../ui/box';
 import { Button } from '../../ui/button';
 import { Card } from '../../ui/card';
 import { HStack } from '../../ui/h-stack';
@@ -35,16 +36,19 @@ export default function TodoList() {
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
         keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0} // adjust if you have a header
       >
-        <FlatList
-          contentContainerStyle={{ gap: 20, paddingBottom: 100 }}
-          data={todos}
-          renderItem={renderTodoItems}
-          keyExtractor={item => item.id}
-          extraData={editingTodoId}
-          className="flex-1 h-full"
-          showsVerticalScrollIndicator={false}
-          keyboardShouldPersistTaps="handled"
-        />
+        {!!todos.length && (
+          <FlatList
+            contentContainerStyle={{ gap: 20, paddingBottom: 100 }}
+            data={todos}
+            renderItem={renderTodoItems}
+            keyExtractor={item => item.id}
+            extraData={editingTodoId}
+            className="flex-1 h-full"
+            showsVerticalScrollIndicator={false}
+            keyboardShouldPersistTaps="handled"
+          />
+        )}
+        {!todos.length && <EmptyList />}
       </KeyboardAvoidingView>
     </TouchableWithoutFeedback>
   );
@@ -166,5 +170,32 @@ function TodoItem({ data }: { data: Todo }) {
         </LinearGradient>
       </Card>
     </TouchableWithoutFeedback>
+  );
+}
+
+function EmptyList() {
+  const { theme } = useTheme();
+  return (
+    <Box className="flex-1 flex items-center justify-center">
+      <VStack className="items-center justify-center" space="xs">
+        <Box className="w-32 h-32 rounded-full bg-zinc-600 overflow-hidden mb-3">
+          <LinearGradient
+            className="flex items-center justify-center w-full h-full"
+            colors={theme === 'dark' ? ['#3f3f46', '#52525b'] : ['#d4d4d8', '#fff']}>
+            <Ionicons
+              name="clipboard-outline"
+              size={50}
+              color={theme === 'dark' ? '#a1a1aa' : '#52525b'}
+            />
+          </LinearGradient>
+        </Box>
+        <Text size="2xl" className="font-inter-semibold">
+          No Todos Yet!
+        </Text>
+        <Text size="md" className="text-typography-400 text-center">
+          Add your first todo above to get started
+        </Text>
+      </VStack>
+    </Box>
   );
 }
