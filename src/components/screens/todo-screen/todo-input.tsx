@@ -1,8 +1,7 @@
 import { createUuid } from '@/src/lib/uuid';
-import { useTodoStore } from '@/src/store/store-todo';
+import { useTodoStore } from '@/src/store/todo-store';
 import { Todo } from '@/src/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
-import { zodResolver } from '@hookform/resolvers/zod';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Controller, useForm } from 'react-hook-form';
 import { Keyboard, TouchableWithoutFeedback } from 'react-native';
@@ -18,38 +17,68 @@ import {
 } from '../../ui/form-control';
 import { HStack } from '../../ui/h-stack';
 import { Input, InputField } from '../../ui/input';
+import { Toast, ToastDescription, ToastTitle, useToast } from '../../ui/toast';
 
 const todoValidation = z.object({
-  text: z.string().min(6, { error: 'Atleast 6 characters are required.' }),
+  text: z.string().min(3, { error: 'Atleast 3 characters are required' }),
 });
 type TodoValidation = z.infer<typeof todoValidation>;
 
 export default function TodoInput() {
   const addTodo = useTodoStore(store => store.addTodo);
+  const toast = useToast();
+
   const { theme } = useTheme();
+
   const {
     control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm<TodoValidation>({
-    resolver: zodResolver(todoValidation),
     defaultValues: {
       text: '',
     },
-    mode: 'onSubmit',
   });
 
   const onSubmit = (values: TodoValidation) => {
+    const { success, data, error } = todoValidation.safeParse(values);
+    if (!success) {
+      const { fieldErrors } = error.flatten();
+      const firstError = Object.values(fieldErrors)[0]?.[0] ?? 'There is an error';
+      showErrorToast({ message: firstError });
+      return;
+    }
     const id = createUuid();
     const todo: Todo = {
       id,
-      text: values.text,
+      text: data.text,
       isCompleted: false,
     };
     addTodo(todo);
     reset();
     Keyboard.dismiss();
+  };
+
+  const showErrorToast = ({ title, message }: { title?: string; message?: string }) => {
+    const newId = Math.random();
+    toast.show({
+      id: String(newId),
+      placement: 'top',
+      containerStyle: { top: 50 },
+      duration: 3000,
+      render: ({ id }) => {
+        const uniqueToastId = 'toast-' + id;
+        return (
+          <Toast nativeID={uniqueToastId} className="rounded-2xl" action="error" variant="solid">
+            {title?.length && <ToastTitle>{title}</ToastTitle>}
+            {message?.length && (
+              <ToastDescription className="font-inter-medium">{message}</ToastDescription>
+            )}
+          </Toast>
+        );
+      },
+    });
   };
 
   return (

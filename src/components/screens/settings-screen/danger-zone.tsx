@@ -1,4 +1,4 @@
-import { useTodoStore } from '@/src/store/store-todo';
+import { useTodoStore } from '@/src/store/todo-store';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Alert, TouchableOpacity } from 'react-native';

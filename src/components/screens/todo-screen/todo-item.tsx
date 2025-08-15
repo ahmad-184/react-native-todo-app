@@ -1,4 +1,4 @@
-import { useTodoStore } from '@/src/store/store-todo';
+import { useTodoStore } from '@/src/store/todo-store';
 import { Todo } from '@/src/types';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -7,54 +7,24 @@ import {
   Alert,
   FlatList,
   Keyboard,
-  KeyboardAvoidingView,
-  Platform,
   TextInput as RNTextInput,
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from 'react-native';
 import { useTheme } from '../../ThemeProvider';
-import { Box } from '../../ui/box';
 import { Button } from '../../ui/button';
 import { Card } from '../../ui/card';
 import { HStack } from '../../ui/h-stack';
 import { Text } from '../../ui/text';
 import { VStack } from '../../ui/v-stack';
 
-export default function TodoList() {
-  const todos = useTodoStore(store => store.todos);
-  const editingTodoId = useTodoStore(store => store.editingTodoId);
+type Props = {
+  flatListRef: React.RefObject<FlatList<any> | null>;
+  data: Todo;
+  index: number;
+};
 
-  const renderTodoItems = ({ item }: { item: Todo }) => {
-    return <TodoItem data={item} />;
-  };
-
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <KeyboardAvoidingView
-        style={{ flex: 1 }}
-        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-        keyboardVerticalOffset={Platform.OS === 'ios' ? 100 : 0} // adjust if you have a header
-      >
-        {!!todos.length && (
-          <FlatList
-            contentContainerStyle={{ gap: 20, paddingBottom: 100 }}
-            data={todos}
-            renderItem={renderTodoItems}
-            keyExtractor={item => item.id}
-            extraData={editingTodoId}
-            className="flex-1 h-full"
-            showsVerticalScrollIndicator={false}
-            keyboardShouldPersistTaps="handled"
-          />
-        )}
-        {!todos.length && <EmptyList />}
-      </KeyboardAvoidingView>
-    </TouchableWithoutFeedback>
-  );
-}
-
-function TodoItem({ data }: { data: Todo }) {
+export default function TodoItem({ data, index, flatListRef }: Props) {
   const { updateTodo, removeTodo, editingTodoId, setEditingTodoId } = useTodoStore();
   const { theme } = useTheme();
   const [text, setText] = useState(data.text);
@@ -81,17 +51,22 @@ function TodoItem({ data }: { data: Todo }) {
 
   useEffect(() => {
     if (editingTodoId === data.id) {
+      flatListRef?.current?.scrollToIndex({
+        index,
+        animated: true,
+        viewPosition: 0.4,
+      });
       setTimeout(() => {
         inputRef.current?.focus();
-      }, 100);
+      }, 0);
     }
   }, [editingTodoId]);
 
   const handleBlur = () => {
     if (editingTodoId === data.id) {
       setEditingTodoId(null);
+      updateTodo({ id: data.id, text });
     }
-    updateTodo({ id: data.id, text });
   };
 
   const isEditing = editingTodoId === data.id;
@@ -139,8 +114,9 @@ function TodoItem({ data }: { data: Todo }) {
                   value={text}
                   onChangeText={setText}
                   onBlur={handleBlur}
+                  autoFocus={false}
                   multiline
-                  className="font-inter-regular !text-typography-700 text-lg border-zinc-500 border-b p-0"
+                  className="font-inter-regular !text-typography-700 text-lg border-0 p-0"
                 />
               )}
               <HStack space="md">
@@ -170,32 +146,5 @@ function TodoItem({ data }: { data: Todo }) {
         </LinearGradient>
       </Card>
     </TouchableWithoutFeedback>
-  );
-}
-
-function EmptyList() {
-  const { theme } = useTheme();
-  return (
-    <Box className="flex-1 flex items-center justify-center">
-      <VStack className="items-center justify-center" space="xs">
-        <Box className="w-32 h-32 rounded-full bg-zinc-600 overflow-hidden mb-3">
-          <LinearGradient
-            className="flex items-center justify-center w-full h-full"
-            colors={theme === 'dark' ? ['#3f3f46', '#52525b'] : ['#d4d4d8', '#fff']}>
-            <Ionicons
-              name="clipboard-outline"
-              size={50}
-              color={theme === 'dark' ? '#a1a1aa' : '#52525b'}
-            />
-          </LinearGradient>
-        </Box>
-        <Text size="2xl" className="font-inter-semibold">
-          No Todos Yet!
-        </Text>
-        <Text size="md" className="text-typography-400 text-center">
-          Add your first todo above to get started
-        </Text>
-      </VStack>
-    </Box>
   );
 }

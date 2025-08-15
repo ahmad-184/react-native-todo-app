@@ -1,4 +1,4 @@
-import { useTodoStore } from '@/src/store/store-todo';
+import { useTodoStore } from '@/src/store/todo-store';
 import Ionicons from '@expo/vector-icons/Ionicons';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Box } from '../../ui/box';
@@ -15,7 +15,7 @@ export default function Header() {
   const percentageCompleted = total === 0 ? 0 : (completed / total) * 100;
 
   return (
-    <Box className="mb-9 pt-5">
+    <Box className="pt-5">
       <HStack className="gap-5 mb-5 items-center">
         <Box className="size-16 rounded-[16px]">
           <LinearGradient
